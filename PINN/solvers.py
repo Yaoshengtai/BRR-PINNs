@@ -107,7 +107,7 @@ class SingleNetworkApproximator2DSpatial_heat(Approximator):
     def _boundary_mse(self, bc):
         xx, yy = next(bc.points_generator)
         uu= self.__call__(xx.requires_grad_(), yy.requires_grad_())
-        loss=torch.mean(abs(bc.form(uu, xx, yy))**2)
+        loss=torch.mean(abs(bc.form(uu[:,0], xx, yy))**2)
         w=bc.weight
         loss=loss*w
         return loss
