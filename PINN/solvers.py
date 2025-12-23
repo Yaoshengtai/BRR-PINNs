@@ -156,17 +156,18 @@ class SingleNetworkApproximator2DSpatial_deform(Approximator):
 
             u_par_0=0
             # Excatly impose bottom boundary, z-direction displacement constraint
-            uu[:,1]=u_par_0+yy*uu[:,1].clone() 
+            uu[:,1]=u_par_0+yy*uu[:,1].clone()/h1
 
             # Excatly impose tau_zr on four boundaries
-            uu[:,5]=u_par_0+(h1-yy)*(xx-r1)*(r2-xx)*yy*uu[:,5].clone()\
-            /((h1-yy)*(xx-r1)*(r2-xx)+(h1-yy)*(xx-r1)*yy+(h1-yy)*(r2-xx)*yy+(xx-r1)*(r2-xx)*yy+1e-20)
+            # uu[:,5]=u_par_0+(h1-yy)*(xx-r1)*(r2-xx)*yy*uu[:,5].clone()\
+            # /((h1-yy)*(xx-r1)*(r2-xx)+(h1-yy)*(xx-r1)*yy+(h1-yy)*(r2-xx)*yy+(xx-r1)*(r2-xx)*yy+1e-20)
+            uu[:,5]=u_par_0+(h1-yy)*(xx-r1)*(r2-xx)*yy*uu[:,5].clone()/(h1*(r2-r1)**2)
             
             u_par_up=((-10+1)*(2*((xx-r1)/(r2-r1))**3-3*((xx-r1)/(r2-r1))**2+1)-1)
             # Excatly impose sigma_zz on up boundary
-            uu[:,4]=u_par_up+(h1-yy)*uu[:,4].clone()
+            uu[:,4]=u_par_up+(h1-yy)*uu[:,4].clone()/h1
             # Excatly impose sigma_rr on left and right boundaries
-            uu[:,2]=u_par_up+(xx-r1)*(r2-xx)*uu[:,2].clone()/(r2-r1)
+            uu[:,2]=u_par_up+(xx-r1)*(r2-xx)*uu[:,2].clone()/(r2-r1)**2
 
             return uu
     
